@@ -34,8 +34,8 @@ else
     for k = 1:z
         A.Ln_TI(k) = log(A.TI(k));
     end
-    toDelete = A.Ln_TI == 0;
-    A(toDelete,:) = [];
+%     toDelete = A.Ln_TI == 0;
+%     A(toDelete,:) = [];
     z = numel(A.Ln_TI);
 end
 
