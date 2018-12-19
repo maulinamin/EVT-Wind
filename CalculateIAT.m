@@ -28,6 +28,4 @@ A = data;
 for k = 2:numel(A.Date_Time)
 A.Time_Interval(k) = daysact(A.Date_Time(k-1), A.Date_Time(k));
 end
-toDelete = A.Time_Interval < 7;
-A(toDelete,:) = [];
 WindData = A;

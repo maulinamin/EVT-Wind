@@ -38,22 +38,26 @@ clc; %Clear Command Window
 %===================================
 % Inputs
 %===================================
-% Location of Trenton CSV files obtained from Environment Canada
-folder='C:\Users\Maulin Amin\OneDrive - University of Waterloo\Waterloo\Research Project\Matlab\CSV\Trenton';
+% Location of CSV files obtained from Environment Canada
+allFolders = {'C:\Users\Maulin Amin\OneDrive - University of Waterloo\Waterloo\Research Project\Matlab\CSV\Trenton','C:\Users\Maulin Amin\OneDrive - University of Waterloo\Waterloo\Research Project\Matlab\CSV\KW','C:\Users\Maulin Amin\OneDrive - University of Waterloo\Waterloo\Research Project\Matlab\CSV\London','C:\Users\Maulin Amin\OneDrive - University of Waterloo\Waterloo\Research Project\Matlab\CSV\Hamilton','C:\Users\Maulin Amin\OneDrive - University of Waterloo\Waterloo\Research Project\Matlab\CSV\Sarnia','C:\Users\Maulin Amin\OneDrive - University of Waterloo\Waterloo\Research Project\Matlab\CSV\Wiarton','C:\Users\Maulin Amin\OneDrive - University of Waterloo\Waterloo\Research Project\Matlab\CSV\Toronto_Island','C:\Users\Maulin Amin\OneDrive - University of Waterloo\Waterloo\Research Project\Matlab\CSV\Toronto_Airport'}; 
+% folder='C:\Users\Maulin Amin\OneDrive - University of Waterloo\Waterloo\Research Project\Matlab\CSV\Trenton';
 %Threshold Value
 %The reason behind using two threshold values is that that after the
 %shifting we end-up with values starting from '1' rather than '0'.
-u1 = 61;
+u1 = 60.5;
 u2 = 60;
 %
 Column = 1;
 %Are the calculations for wind-speed or inter-arrival data?
-isInterArrival = 0;
+isInterArrival = 1;  % 0 = WInd 
 t1 = 8; %in days
 t2 = 7; %in days 
 %===================================
 % Outputs
 %===================================
+for i = 1:length(allFolders)
+    folder = allFolders{i}; 
+
 wind_data = ExtractCSV(folder);
 wind_data = RemoveBelowThreshold(u1,wind_data);
 wind_data = ShiftKMPHData(u2,wind_data);
@@ -69,10 +73,17 @@ end
 wind_data = RenameDataColumns(isInterArrival,wind_data);
 wind_data = PPPCalculations(isInterArrival,wind_data);
 figure;
-[wind_data,Y1] = PlotLogNormalPPP(isInterArrival,wind_data);
+[wind_data,Y1] = PlotLogNormalPPP(i,isInterArrival,wind_data);
 figure;
-[wind_data,Y2] = PlotExponentialPPP(isInterArrival,wind_data);
+[wind_data,Y2] = PlotExponentialPPP(i,isInterArrival,wind_data);
 figure;
-[wind_data,Y3] = PlotWeibullPPP(isInterArrival,wind_data);
+[wind_data,Y3] = PlotWeibullPPP(i,isInterArrival,wind_data);
 figure;
-[wind_data,Y4] = PlotGumbelPPP(isInterArrival,wind_data);
+[wind_data,Y4] = PlotGumbelPPP(i,isInterArrival,wind_data);
+Q{i,1} = {Y1;Y2;Y3;Y4};
+%Alternative to the above statement is commented out below. The above
+%statement does the same as below in less time as it requires the execution
+%of less instructions.
+% Parameters = {Y1,Y2,Y3,Y4};
+% PARA{i,1} = StorePPPParameters(i,isInterArrival,Parameters);
+end
