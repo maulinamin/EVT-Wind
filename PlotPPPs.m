@@ -49,7 +49,7 @@ u2 = 60;
 %
 Column = 1;
 %Are the calculations for wind-speed or inter-arrival data?
-isInterArrival = 1;  % 0 = WInd 
+isInterArrival = 0;  % 0 = WInd 
 t1 = 8; %in days
 t2 = 7; %in days 
 %===================================

@@ -30,13 +30,11 @@ clc; %Clear Command Window
 % Inputs
 %===================================
 % Location of Trenton CSV files obtained from Environment Canada
-folder='C:\Users\Maulin Amin\OneDrive - University of Waterloo\Waterloo\Winter 2018\Environment Canada\Wind&SnowData\CSV\Trenton';
+folder='C:\Users\Maulin Amin\OneDrive - University of Waterloo\Waterloo\Research Project\Matlab\CSV\Trenton';
 %Threshold Value
 u = 70;
-%
-alpha = 0;   
-%
-beta = 0;
+%Look at different storm events input
+t1 = 7;
 % number of year/s
 %Years = 1;
 Y = 82;     %counter for for loop
@@ -44,26 +42,25 @@ years = (2020:2020+81);
 %percentile
 p = 0.95;
 %exponential parameter
-a = 0.080;
+a = 0.083;
 %add for loop here for mutiple years
 %Days = 365*Years;
 for z = 1:Y
     Days(z) = (365*z)+(365*65)+16;
 end
-%precision
-digitsOld = digits(5);
 %===================================
 % Outputs
 %===================================
 wind_data = ExtractCSV(folder);
 wind_data = RemoveBelowThreshold(u,wind_data);
 wind_data = CalculateIAT(wind_data);
+wind_data = LookAtDifferentStormEvents(t1,wind_data);
 [alpha,beta,R_Squared] = CalculateNhppParameters(wind_data);
 
 % Calculate Delta t, Percentile Xp (shock), and real percentile Yp
 % (sock+threshold)
 for k = 1:Y
-    Delta_t(k) = alpha * ( (Days(k))^(beta-1) ) ;
+    Delta_t(k) = alpha * ( (Days(k))^(p-1) ) ;
     Xp(k) = (-1/a) * log( (-log(p))/(Delta_t(k)) );
     Yp(k) = ( Xp(k) + u );
 end

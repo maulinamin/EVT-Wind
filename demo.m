@@ -51,28 +51,60 @@ Column = 1;
 isInterArrival = 0;
 t1 = 8; %in days
 t2 = 7; %in days 
+% Location of Trenton CSV files obtained from Environment Canada
+folder='C:\Users\Maulin Amin\OneDrive - University of Waterloo\Waterloo\Research Project\Matlab\CSV\Trenton';
+%Threshold Value
+u = 70;
+% number of year/s
+%Years = 1;
+Y = 82;     %counter for for loop
+years = (2020:2020+81);
+%percentile
+p = 0.95;
+%exponential parameter
+a = 0.083;
+%add for loop here for mutiple years
+%Days = 365*Years;
+for z = 1:Y
+    Days(z) = (365*z)+(365*65)+16;
+end
 %===================================
 % Outputs
 %===================================
 wind_data = ExtractCSV(folder);
-wind_data = RemoveBelowThreshold(u1,wind_data);
-wind_data = ShiftKMPHData(u2,wind_data);
-if isInterArrival == 1
-    wind_data = CalculateIAT(wind_data);
-    wind_data = LookAtDifferentStormEvents(t1,wind_data);
-    wind_data = ShiftIATData(t2,wind_data);
-    Column = 2;
-    wind_data = ArrangeDataInAscending(Column,wind_data);
-else
-    wind_data = ArrangeDataInAscending(Column,wind_data);
+wind_data = RemoveBelowThreshold(u,wind_data);
+wind_data = CalculateIAT(wind_data);
+A = wind_data;
+toDelete = A.Time_Interval < 7;
+A(toDelete,:) = [];
+%Calculate the Cum_N(t)
+for k = 1:numel(A.Date_Time)
+    A.Cum_Nt(k) = k;
 end
-wind_data = RenameDataColumns(isInterArrival,wind_data);
-wind_data = PPPCalculations(isInterArrival,wind_data);
-figure;
-[wind_data,Y1] = PlotLogNormalPPP(isInterArrival,wind_data);
-figure;
-[wind_data,Y2] = PlotExponentialPPP(isInterArrival,wind_data);
-figure;
-[wind_data,Y3] = PlotWeibullPPP(isInterArrival,wind_data);
-figure;
-[wind_data,Y4] = PlotGumbelPPP(isInterArrival,wind_data);
+
+%Calculate the cumulative time interval
+first = 0;
+for k = 1:numel(A.Date_Time)
+    second = A.Time_Interval(k);
+    A.CumTI(k) = first+second;
+    first = A.CumTI(k);
+end
+%Calculate the log of Cum_N(t)
+for k = 1:numel(A.Date_Time)
+    A.Ln_Cum_Nt(k) = log(A.Cum_Nt(k));
+end
+%Calculate the log of cumulative time interval
+for k = 1:numel(A.Date_Time)
+    A.Ln_CumTI(k) = log(A.CumTI(k));
+end
+
+A = table2timetable(A);
+
+%PLOT THE NHPP
+p = polyfit(A.Ln_CumTI,A.Ln_Cum_Nt,1); 
+mdl = fitlm(A.Ln_CumTI,A.Ln_Cum_Nt);
+%Parameter Calculation
+b = p(1);
+%a = exp(a);
+a = exp(p(2));
+R_sqd = mdl.Rsquared.Ordinary;

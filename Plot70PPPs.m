@@ -19,6 +19,7 @@
 % *
 % * Date            Author      Ref    Revision (Date in YYYYMMDD format) 
 % * 2018/12/19      M Amin      1      Modified 60KMPH for 70KMPH. 
+%   2019/01/02      M Amin      2      Rename plot files to be saved.
 % *
 % |**********************************************************************;
 %==================================
@@ -41,7 +42,7 @@ u2 = 70;
 %
 Column = 1;
 %Are the calculations for wind-speed or inter-arrival data?
-isInterArrival = 1;  % 0 = WInd 
+isInterArrival = 0;  % 0 = WInd 
 t1 = 8; %in days
 t2 = 7; %in days 
 %===================================
@@ -65,13 +66,13 @@ end
 wind_data = RenameDataColumns(isInterArrival,wind_data);
 wind_data = PPPCalculations(isInterArrival,wind_data);
 figure;
-[wind_data,Y1] = PlotLogNormalPPP(i,isInterArrival,wind_data);
+[wind_data,Y1] = Plot70LogNormalPPP(i,isInterArrival,wind_data);
 figure;
-[wind_data,Y2] = PlotExponentialPPP(i,isInterArrival,wind_data);
+[wind_data,Y2] = Plot70ExponentialPPP(i,isInterArrival,wind_data);
 figure;
-[wind_data,Y3] = PlotWeibullPPP(i,isInterArrival,wind_data);
+[wind_data,Y3] = Plot70WeibullPPP(i,isInterArrival,wind_data);
 figure;
-[wind_data,Y4] = PlotGumbelPPP(i,isInterArrival,wind_data);
+[wind_data,Y4] = Plot70GumbelPPP(i,isInterArrival,wind_data);
 Q{i,1} = {Y1;Y2;Y3;Y4};
 %Alternative to the above statement is commented out below. The above
 %statement does the same as below in less time as it requires the execution

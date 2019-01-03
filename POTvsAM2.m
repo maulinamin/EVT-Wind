@@ -30,10 +30,12 @@ clc; %Clear Command Window
 % Inputs
 %===================================
 % Location of Trenton CSV files obtained from Environment Canada
-folder='C:\Users\Maulin Amin\OneDrive - University of Waterloo\Waterloo\Winter 2018\Environment Canada\Wind&SnowData\CSV\Trenton';
+folder='C:\Users\Maulin Amin\OneDrive - University of Waterloo\Waterloo\Research Project\Matlab\CSV\Trenton';
 %Threshold Value
 u = 70;
 %
+%Look at different storm events input
+t1 = 7;
 alpha = 0;   
 %
 beta = 0;
@@ -57,6 +59,7 @@ end
 wind_data = ExtractCSV(folder);
 wind_data = RemoveBelowThreshold(u,wind_data);
 wind_data = CalculateIAT(wind_data);
+wind_data = LookAtDifferentStormEvents(t1,wind_data);
 [alpha,beta,R_Squared] = CalculateNhppParameters(wind_data);
 
 % Calculate Delta t, Percentile Xp (shock), and real percentile Yp

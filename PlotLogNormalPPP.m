@@ -70,7 +70,7 @@ if isInterArrival == 0
     lambda = p(2);
     R_Sq = mdl.Rsquared.Ordinary;
     mean = exp( lambda + ( 0.5*(eta^2) ) );
-    var = exp((2*lambda)+(eta^2)) * (exp(eta^2) - 1);
+    var = exp((2*lambda)+(eta^2)) * ((exp(eta^2)) - 1);
     sd = sqrt(var);
     cov = sd/mean;
     Y = sprintf('Lognormal PPP: %f X + %f; R-squared = %f; eta = %f; lambda = %f; Mean = %f; Variance = %f, Covariance = %f',p(1),p(2),R_Sq,eta,lambda,mean,var,cov);
@@ -123,7 +123,7 @@ else
     lambda = p(2);
     R_Sq = mdl.Rsquared.Ordinary;
     mean = exp( lambda + (0.5*(eta^2) ) );
-    var = exp((2*lambda)+(eta^2)) * (exp(eta^2) - 1);
+    var = exp((2*lambda)+(eta^2)) * ((exp(eta^2)) - 1);
     sd = sqrt(var);
     cov = sd/mean;
     Y = sprintf('Lognormal PPP: %f X + %f; R-squared = %f; eta = %f; lambda = %f; Mean = %f; Variance = %f, Covariance = %f',p(1),p(2),R_Sq,eta,lambda,mean,var,cov);
