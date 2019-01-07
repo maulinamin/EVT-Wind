@@ -20,6 +20,8 @@
 % * Date            Author      Ref    Revision (Date in YYYYMMDD format) 
 % * YYYY/MM/DD      M Amin      0      Description of Revision
 % * 2019/01/02      M Amin      1      Copied from EleventhStepTrenton.m
+% * 2019/01/03      M Amin      2      Added the portion that calculates
+%                                      the parameters using MLE. 
 %
 
 % |**********************************************************************;
@@ -78,7 +80,13 @@ wind_data = PPPCalculations(isInterArrival,wind_data);
 
 %Reformat sample data for convenience
 P = wind_data.KMPH;
+par_mm = [alpha; beta];
 %number of sample data
 n = length(P);
 %ML estimation of parameters using fminunc to find local minimum
-% fun1 = @(x)
+fun1 = @(x) n*log(x(2)) + sum((P-x(1))/x(2)) + sum(exp(-(P-x(1))/x(2)));
+par1 = fminunc(fun1, par_mm);
+par_ml = [par_ml,par1];
+
+% phat = mle(P,'distribution','EV')
+% parmhat = evfit(P)

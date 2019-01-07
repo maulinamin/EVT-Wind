@@ -60,7 +60,7 @@ wind_data = ExtractCSV(folder);
 wind_data = RemoveBelowThreshold(u,wind_data);
 wind_data = CalculateIAT(wind_data);
 wind_data = LookAtDifferentStormEvents(t1,wind_data);
-[alpha,beta,R_Squared] = CalculateNhppParameters(wind_data);
+[alpha,beta,R_Squared,wind_data] = CalculateNhppParameters(wind_data);
 
 % Calculate Delta t, Percentile Xp (shock), and real percentile Yp
 % (sock+threshold)
