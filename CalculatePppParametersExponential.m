@@ -21,7 +21,7 @@
 function a = CalculatePppParametersExponential(u,folder)
 wind_data = ExtractCSV(folder);
 wind_data = RemoveBelowThreshold(u,wind_data);
-A = ShiftData(wind_data);
+A = ShiftKMPHData(u,wind_data);
 
 WindData = A;
 PPTH60 = WindData(:,4);

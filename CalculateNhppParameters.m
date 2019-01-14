@@ -18,7 +18,7 @@
 % * YYYY/MM/DD      M Amin      1      Description of Revision
 % *
 % |**********************************************************************;
-function [a,b,R_sqd] = CalculateNhppParameters(data)
+function [a,b,R_sqd,A] = CalculateNhppParameters(data)
 A = data;
 %Calculate the Cum_N(t)
 for k = 1:numel(A.Date_Time)

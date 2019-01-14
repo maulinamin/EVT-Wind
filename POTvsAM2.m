@@ -22,7 +22,7 @@
 % |**********************************************************************;
 %==================================
 % Basic Initialization instructions
-%==================================
+% ==================================
 clear; % Clear Memory
 clc; %Clear Command Window
 
@@ -31,6 +31,9 @@ clc; %Clear Command Window
 %===================================
 % Location of Trenton CSV files obtained from Environment Canada
 folder='C:\Users\Maulin Amin\OneDrive - University of Waterloo\Waterloo\Research Project\Matlab\CSV\Trenton';
+
+
+
 %Threshold Value
 u = 70;
 %
@@ -46,7 +49,7 @@ years = (2020:2020+81);
 %percentile
 p = 0.95;
 %exponential parameter
-a = 0.080;
+a = 0.083;
 %add for loop here for mutiple years
 %Days = 365*Years;
 for z = 1:Y
@@ -60,10 +63,11 @@ wind_data = ExtractCSV(folder);
 wind_data = RemoveBelowThreshold(u,wind_data);
 wind_data = CalculateIAT(wind_data);
 wind_data = LookAtDifferentStormEvents(t1,wind_data);
+wind_data = CalculateIAT(wind_data);
 [alpha,beta,R_Squared,wind_data] = CalculateNhppParameters(wind_data);
 
 % Calculate Delta t, Percentile Xp (shock), and real percentile Yp
-% (sock+threshold)
+% (shock+threshold)
 for k = 1:Y
     Delta_t(k) = alpha * ( (Days(k))^beta );
     Xp(k) = (-1/a) * log( (-log(p))/(Delta_t(k)) );
@@ -85,23 +89,22 @@ writetable(Data,'NHPP_Prediction.csv','Delimiter',',','QuoteStrings',true)
 figure(1);
 plot(Data.Year,Data.Yp);
 ylabel({'95th Percentile';'of Wind Speed'}); xlabel('Year');
-% set(gca,'Ylim',[185 195],'Xlim',[2018 2027]) % Adjust Y limits of "current axes"
+% set(gca,'Ylim',[100 220],'Xlim',[2020 2100]) % Adjust Y limits of "current axes"
 set(gca,'FontName','Times');
 set(gcf,'Units','inches') % Set figure size units of "current figure"
 set(gcf,'Color','white');
-set(gcf,'Position',[0,0,3,2.5]) % Set figure width (6 in.) and height (4 in.)
+set(gcf,'Position',[0,0,3,1.5]) % Set figure width (6 in.) and height (4 in.)
 print -deps2c 600-2.eps % Save as PDF
 movefile('600-2.eps','C:\Users\Maulin Amin\OneDrive - University of Waterloo\Waterloo\Winter 2018\Environment Canada\Thesis\Latex\plots');
 
-
 figure(2);
-plot(Data.Year,Data.General_Yp);
-ylabel({'Generalized 95th Percentile';'of Wind Speed'}); xlabel('Year');
-% set(gca,'Ylim',[134 139],'Xlim',[2018 2027]) % Adjust Y limits of "current axes"
+plot(Data.Year,Data.General_Yp,'--');
+ylabel({'95th Percentile';'of Wind Speed'}); xlabel('Year');
+% set(gca,'Ylim',[130 145],'Xlim',[2020 2100]) % Adjust Y limits of "current axes"
 set(gca,'FontName','Times');
 set(gcf,'Units','inches') % Set figure size units of "current figure"
 set(gcf,'Color','white');
-set(gcf,'Position',[0,0,3,2.5]) % Set figure width (6 in.) and height (4 in.)
+set(gcf,'Position',[0,0,3,1.5]) % Set figure width (6 in.) and height (4 in.)
 print -deps2c 601-2.eps % Save as PDF
 movefile('601-2.eps','C:\Users\Maulin Amin\OneDrive - University of Waterloo\Waterloo\Winter 2018\Environment Canada\Thesis\Latex\plots');
 
